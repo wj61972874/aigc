@@ -14,6 +14,14 @@ module.exports = {
         use: ["style-loader", "css-loader", "postcss-loader"],
       },
       {
+        test: /\.less$/,
+        use: [
+          "style-loader", // 将JS字符串生成为style节点
+          "css-loader", // 将CSS转化成CommonJS
+          "less-loader", // 将Less编译成CSS
+        ],
+      },
+      {
         test: /\.tsx?$/,
         use: "ts-loader",
         exclude: /node_modules/,
@@ -31,6 +39,10 @@ module.exports = {
     ],
   },
   resolve: {
+    alias: {
+      "@": path.resolve(__dirname, "src/"), // 将@映射到项目的src目录
+      // 可以添加更多的别名
+    },
     extensions: [".tsx", ".ts", ".js", ".jsx"],
   },
   plugins: [

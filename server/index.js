@@ -1,8 +1,12 @@
 const Koa = require("koa");
 const router = require("./apis/api");
 const parser = require("koa-bodyparser");
+const cors = require("koa2-cors");
 
 const app = new Koa();
+
+//设置允许跨域
+app.use(cors());
 
 app.use(parser());
 
