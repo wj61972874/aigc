@@ -30,6 +30,8 @@ function matchTextGerenteType(type, message) {
   switch (type) {
     case 1:
       return `生成一个以“${message}”为头的藏头诗，要求是对仗工整`;
+    case 2:
+      return message;
     default:
       return `生成一个以“${message}”为头的藏头诗，要求是对仗工整`;
   }

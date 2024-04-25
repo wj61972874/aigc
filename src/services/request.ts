@@ -15,9 +15,10 @@ function request(url: string, options: Record<string, any>) {
       // 业务数据正常返回
       return response.json().then(
         (res) => {
+          console.log("杰哥测试---", res);
           // 业务逻辑 -1 -2
-          if (res.code !== "0") {
-            if (res.code === "2") {
+          if (res.code !== 200) {
+            if (res.code === 2) {
               return request.error(res);
             }
             request.trigger(`${res.code}`, res);

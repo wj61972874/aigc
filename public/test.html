@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canvas Drawing Board</title>
+    <style>
+        canvas {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="drawing-board" width="1024" height="1024"></canvas>
+    <button id="save-btn">保存</button>
+    <img id="saved-image" src="" alt="Saved Canvas Image"
+        style="display: block; margin-top: 10px; border: 1px solid #ccc;">
+    <script>
+        const canvas = document.getElementById('drawing-board');
+        const ctx = canvas.getContext('2d');
+        const saveBtn = document.getElementById('save-btn'); // 获取保存按钮
+        const savedImage = document.getElementById('saved-image'); // 获取 img 标签
+
+        let isDrawing = false;
+        let lastX;
+        let lastY;
+
+        function startDrawing(e) {
+            isDrawing = true;
+            lastX = e.offsetX;
+            lastY = e.offsetY;
+        }
+
+        function draw(e) {
+            if (!isDrawing) return;
+            ctx.lineWidth = 5;
+            ctx.lineCap = 'round';
+            ctx.strokeStyle = 'black';
+
+            ctx.beginPath();
+            ctx.moveTo(lastX, lastY);
+            ctx.lineTo(e.offsetX, e.offsetY);
+            ctx.stroke();
+            lastX = e.offsetX;
+            lastY = e.offsetY;
+        }
+
+        function stopDrawing() {
+            isDrawing = false;
+            ctx.beginPath(); // 开始新的路径
+        }
+
+        function saveCanvas() {
+            // 将Canvas内容转换为Blob对象
+            canvas.toBlob(function (blob) {
+                // 创建一个新的File对象
+                const file = new File([blob], "canvas_image.png", { type: "image/png" });
+                // 创建一个FormData对象
+                const form = new FormData();
+                // 将File对象添加到FormData对象中
+                form.append('sketch_file', file);
+                form.append('prompt', 'Cat with a jeans jacket, ‘Digital Art’ Style');
+
+                // 调用API接口
+                fetch('https://clipdrop-api.co/sketch-to-image/v1/sketch-to-image', {
+                    method: 'POST',
+                    headers: {
+                        'x-api-key': 'af65b3b22882e8b5740d086277daacc60c727623e54c81250b95f53aeb482f560ea162c702c0a5ae7758b749ff47a466', // 确保替换为你的API密钥
+                    },
+                    body: form,
+                })
+                    .then(response => response.arrayBuffer())
+                    .then(buffer => {
+                        // buffer是返回的图像二进制数据
+                        // 将返回的图像显示在页面上
+                        const blob = new Blob([buffer], { type: 'image/png' });
+                        const imageUrl = URL.createObjectURL(blob);
+                        savedImage.src = imageUrl; // 将img标签的src设置为图像的URL
+                        savedImage.style.display = 'block'; // 显示图像
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+            }, 'image/png');
+
+
+
+
+        }
+
+
+        canvas.addEventListener('mousedown', startDrawing);
+        canvas.addEventListener('mousemove', draw);
+        canvas.addEventListener('mouseup', stopDrawing);
+        canvas.addEventListener('mouseout', stopDrawing);
+
+        saveBtn.addEventListener('click', saveCanvas); // 添加保存按钮的点击事件监听器
+    </script>
+</body>
+
+</html>

@@ -23,10 +23,10 @@ router.post("/aigc/text2Image", async (ctx) => {
 // 文案生成
 router.post("/aigc/textGenerate", async (ctx) => {
   console.log("参数入参---", ctx.request.body);
-  const { type, massages } = ctx.request.body;
+  const { type, messages } = ctx.request.body;
   //   ctx.body = "This is a POST request test endpoint";
   //处理Stable-Diffusion-XL模型prompt数据
-  const res = await handleResolveTextParmas(type, massages);
+  const res = await handleResolveTextParmas(type, messages);
   ctx.body = res;
 });
 

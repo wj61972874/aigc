@@ -1,5 +1,6 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = {
   entry: "./src/index.tsx",
@@ -13,13 +14,27 @@ module.exports = {
         test: /\.css$/i,
         use: ["style-loader", "css-loader", "postcss-loader"],
       },
+      // ...其他规则...
       {
-        test: /\.less$/,
+        test: /\.module\.scss$/, // 只针对.module.scss文件应用以下loader
         use: [
           "style-loader", // 将JS字符串生成为style节点
-          "css-loader", // 将CSS转化成CommonJS
-          "less-loader", // 将Less编译成CSS
+          {
+            loader: "css-loader", // 将CSS转化成CommonJS模块
+            options: {
+              importLoaders: 1, // 在css-loader前应用的loader数量
+              modules: {
+                localIdentName: "[name]__[local]___[hash:base64:5]", // 定义生成的类名格式
+              },
+            },
+          },
+          "sass-loader", // 将Sass编译成CSS
         ],
+      },
+      {
+        test: /\.scss$/,
+        exclude: /\.module\.scss$/, // 排除.module.scss文件
+        use: ["style-loader", "css-loader", "sass-loader"],
       },
       {
         test: /\.tsx?$/,
@@ -49,8 +64,13 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: "./public/index.html",
     }),
+    // new MiniCssExtractPlugin({
+    //   filename: "styles.css",
+    // }),
   ],
   devServer: {
+    allowedHosts: "all",
+    historyApiFallback: true,
     static: {
       directory: path.join(__dirname, "dist"),
     },

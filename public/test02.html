@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canvas Drawing Board</title>
+    <style>
+        canvas {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="drawing-board" width="480" height="480"></canvas>
+    <button id="save-btn">保存</button>
+    <img id="saved-image" src="" alt="Saved Canvas Image"
+        style="display: block; margin-top: 10px; border: 1px solid #ccc;">
+    <script>
+        const canvas = document.getElementById('drawing-board');
+        const ctx = canvas.getContext('2d');
+        const saveBtn = document.getElementById('save-btn'); // 获取保存按钮
+        const savedImage = document.getElementById('saved-image'); // 获取 img 标签
+
+        let isDrawing = false;
+        let lastX;
+        let lastY;
+
+        function startDrawing(e) {
+            isDrawing = true;
+            lastX = e.offsetX;
+            lastY = e.offsetY;
+        }
+
+        function draw(e) {
+            if (!isDrawing) return;
+            ctx.lineWidth = 5;
+            ctx.lineCap = 'round';
+            ctx.strokeStyle = 'black';
+
+            ctx.beginPath();
+            ctx.moveTo(lastX, lastY);
+            ctx.lineTo(e.offsetX, e.offsetY);
+            ctx.stroke();
+            lastX = e.offsetX;
+            lastY = e.offsetY;
+        }
+
+        function stopDrawing() {
+            isDrawing = false;
+            ctx.beginPath(); // 开始新的路径
+        }
+
+
+        // const responseJSON = (await response.json()) as GenerationResponse
+
+        // responseJSON.artifacts.forEach((image, index) => {
+        //     fs.writeFileSync(
+        //         `out/v1_img2img_${index}.png`,
+        //         Buffer.from(image.base64, 'base64')
+        //     )
+        // })
+
+
+
+        function saveCanvas() {
+            console.log("saveCanvas")
+            // 将Canvas内容转换为Blob对象
+            canvas.toBlob(function (blob) {
+                // 创建一个新的File对象
+                const file = new File([blob], "canvas_image.png", { type: "image/png" });
+                // 创建一个FormData对象
+                const engineId = 'stable-diffusion-v1-6'
+                const apiHost = 'https://api.stability.ai'
+                const apiKey = 'sk-QSNQStsTBe04obyWhYcnafzBmu8U501g64DL6XWWYMK578QL';
+
+                if (!apiKey) throw new Error('Missing Stability API key.')
+
+                // NOTE: This example is using a NodeJS FormData library.
+                // Browsers should use their native FormData class.
+                // React Native apps should also use their native FormData class.
+                const formData = new FormData()
+                formData.append('init_image', file)
+                formData.append('init_image_mode', 'IMAGE_STRENGTH')
+                formData.append('image_strength', 0.35)
+                formData.append('text_prompts[0][text]', 'A boy in a broken city leads a dog')
+                formData.append('cfg_scale', 7)
+                formData.append('samples', 1)
+                formData.append('steps', 30)
+                formData.append('style_preset', 'cinematic')
+                
+
+                // 调用API接口
+                fetch(`${apiHost}/v1/generation/${engineId}/image-to-image`, {
+                    method: 'POST',
+                   headers: {
+                        // ...formData.getHeaders(),
+                        Accept: 'application/json',
+                        Authorization: `Bearer ${apiKey}`,
+                    },
+                    body: formData,
+                })
+                    .then(response => response.json())
+                    .then(buffer => {
+                        console.log("buffer----", buffer)
+                        // // buffer是返回的图像二进制数据
+                        // // 将返回的图像显示在页面上
+                        // const blob = new Blob([buffer], { type: 'image/png' });
+                        // const imageUrl = URL.createObjectURL(blob);
+                        savedImage.src =`data:image/png;base64,${buffer.artifacts[0].base64}`; // 将img标签的src设置为图像的URL
+                        // savedImage.style.display = 'block'; // 显示图像
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+            }, 'image/png');
+
+
+
+
+        }
+
+
+        canvas.addEventListener('mousedown', startDrawing);
+        canvas.addEventListener('mousemove', draw);
+        canvas.addEventListener('mouseup', stopDrawing);
+        canvas.addEventListener('mouseout', stopDrawing);
+
+        saveBtn.addEventListener('click', saveCanvas); // 添加保存按钮的点击事件监听器
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,19 @@
+.cus_input {
+  background-color: black;
+}
+
+/* styles.css */
+.fade-in-from-bottom {
+  opacity: 0;
+  transform: translateY(20px); /* 初始位置稍微向下偏移 */
+  transition: opacity 1s ease-in-out, transform 1s ease-in-out; /* 设置过渡效果 */
+}
+
+.fade-in-from-bottom.active {
+  opacity: 1;
+  transform: translateY(0); /* 最终位置在原位 */
+}
+
+.text_test {
+  font-size: 24px;
+}
