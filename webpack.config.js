@@ -5,6 +5,8 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 module.exports = {
   entry: "./src/index.tsx",
   output: {
+    // path: path.resolve(__dirname, "dist"),
+    publicPath: "/",
     path: path.resolve(__dirname, "dist"),
     filename: "bundle.js",
   },
@@ -50,6 +52,18 @@ module.exports = {
             presets: ["@babel/preset-env", "@babel/preset-react"],
           },
         },
+      },
+      {
+        test: /\.(png|jpe?g|gif)$/i,
+        use: [
+          {
+            loader: "url-loader",
+            options: {
+              name: "[name].[hash].[ext]",
+              esModule: false,
+            },
+          },
+        ],
       },
     ],
   },

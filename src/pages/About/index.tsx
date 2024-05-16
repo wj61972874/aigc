@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./index.css";
+import { hideLoading, showLoading } from "@/utils/loading";
 
 export default function AboutPage() {
   const navigator = useNavigate();
@@ -92,6 +93,11 @@ export default function AboutPage() {
 
   function saveCanvas() {
     console.log("saveCanvas");
+    if (!prompts) {
+      alert("请输入提示词");
+      return;
+    }
+    showLoading();
     // 将Canvas内容转换为Blob对象
     canvasRef.current.toBlob(function (blob) {
       // 创建一个新的File对象
@@ -133,9 +139,11 @@ export default function AboutPage() {
           setGeneratedImage(
             `data:image/png;base64,${buffer.artifacts[0].base64}`
           );
+          hideLoading();
         })
         .catch((error) => {
           console.error("Error:", error);
+          hideLoading();
         });
     }, "image/png");
   }

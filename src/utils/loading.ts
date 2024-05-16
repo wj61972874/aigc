@@ -23,7 +23,7 @@ const loadingHTML = `
       </div>
     </div>
   </div>
-  <div class="load-tip">加载中...</div>
+  <div class="load-tip">准备中...</div>
 </div>`;
 
 // 获取app节点

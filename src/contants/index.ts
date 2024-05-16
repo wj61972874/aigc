@@ -1,5 +1,5 @@
 export const RECEVIER = "刘岩";
-export const LETTERS_MAXLENGTH = 100;
+export const LETTERS_MAXLENGTH = 200;
 
 export const FANS_LETTER_PROMPTS = `请帮我写一封给音乐剧演员${RECEVIER}的信，字数在${LETTERS_MAXLENGTH}字左右`;
 
@@ -7,6 +7,7 @@ export const FANS_LETTER_QUESTIONS = [
   {
     id: 1,
     question: "你想在信中表达的主题是？",
+    require: true,
     prePrompt: "表达",
     promptSort: 9,
     componentType: "select",
@@ -27,6 +28,7 @@ export const FANS_LETTER_QUESTIONS = [
   },
   {
     id: 2,
+    require: true,
     question: "你最喜欢刘岩的音乐剧是？",
     prePrompt: "尽量可以引用刘岩的音乐剧",
     sufPrompt: "一句台词",
@@ -62,6 +64,7 @@ export const FANS_LETTER_QUESTIONS = [
   },
   {
     id: 3,
+    require: true,
     question: "你希望信件的语气是？",
     prePrompt: "希望用",
     sufPrompt: "的语气",
@@ -84,6 +87,7 @@ export const FANS_LETTER_QUESTIONS = [
   },
   {
     id: 4,
+    require: true,
     question: "你希望信件配图的风格是？",
     prePrompt: "希望信件的语气是",
     componentType: "select",
@@ -104,6 +108,7 @@ export const FANS_LETTER_QUESTIONS = [
   },
   {
     id: 5,
+    require: true,
     question: "你希望信件的结尾是？",
     prePrompt: "希望信件的结尾",
     promptSort: 8,
@@ -125,6 +130,7 @@ export const FANS_LETTER_QUESTIONS = [
   },
   {
     id: 6,
+    require: false,
     question: "你对刘岩有没有什么特别的话要说？",
     componentType: "textarea",
     maxLength: 30,
@@ -132,6 +138,7 @@ export const FANS_LETTER_QUESTIONS = [
   },
   {
     id: 7,
+    require: true,
     question: "观看刘岩的年份",
     componentType: "options",
     answers: [
@@ -155,6 +162,7 @@ export const FANS_LETTER_QUESTIONS = [
   },
   {
     id: 8,
+    require: true,
     question: "落款的人名",
     componentType: "input",
     maxLength: 10,

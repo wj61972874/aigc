@@ -1,0 +1,19 @@
+.letter_body {
+    position: absolute;
+    padding: 24px;
+
+    object-fit: fill;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+
+    box-sizing: border-box;
+
+}
+
+.letter_text {
+    position: absolute;
+    top: 0;
+    // padding: 45px 25px;
+    // font-size: 7px;
+}

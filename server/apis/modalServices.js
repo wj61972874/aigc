@@ -1,4 +1,5 @@
 const http = require("./request");
+const { MODAL_TYPE_ENUM, config } = require("./config");
 
 const text2imageConfig = {
   url: "https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/text2image/sd_xl",
@@ -16,6 +17,10 @@ const textGenerateConfig = {
     disable_search: false,
     enable_citation: false,
   },
+};
+
+const contentCensorConfig = {
+  url: "https://aip.baidubce.com/rest/2.0/solution/v1/text_censor/v2/user_defined",
 };
 
 async function handleResolveModalParmas(prompt) {
@@ -48,11 +53,31 @@ async function handleResolveTextParmas(type, message) {
   textGenerateConfig.defaultParams.messages = _messages;
   return await http.post(
     textGenerateConfig.url,
-    textGenerateConfig.defaultParams
+    textGenerateConfig.defaultParams,
+    MODAL_TYPE_ENUM.CONTENT_GENERATE
   );
 }
 
+async function handleResolveContentCensorParmas(checkData) {
+  // const requests = Object.values(checkData).map((value) => {
+  //   console.log("handleResolveContentCensorParmas start", value);
+  return await http.post(
+    contentCensorConfig.url,
+    { text: checkData, strategyId: config.CONTENT_CENSOR.strategyId },
+    MODAL_TYPE_ENUM.CONTENT_CENSOR,
+    {
+      Headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+    }
+  );
+  // });
+
+  // const responses = await Promise.all(requests);
+  // return responses;
+}
 module.exports = {
   handleResolveModalParmas,
   handleResolveTextParmas,
+  handleResolveContentCensorParmas,
 };

@@ -1,5 +1,5 @@
 const request = require("request");
-const config = require("./config.json");
+const { config, MODAL_TYPE_ENUM } = require("./config");
 
 const http = {
   post: sendPostRequest,
@@ -23,16 +23,21 @@ const errorRes = {
  * @param {object} data 请求的数据
  * @returns {Promise<object>} 响应数据
  */
-async function sendPostRequest(url, data) {
-  const accessToken = await getAccessToken();
+async function sendPostRequest(url, data, modalType, httpOptions) {
+  const accessToken = await getAccessToken(modalType);
+  const { headers } = httpOptions;
   const options = {
     method: "POST",
     url: url + "?access_token=" + accessToken,
     headers: {
       "Content-Type": "application/json",
       Accept: "application/json",
+      ...headers,
     },
-    body: JSON.stringify(data),
+    [config[modalType].apiContentType]:
+      config[modalType] === MODAL_TYPE_ENUM.CONTENT_GENERATE
+        ? JSON.stringify(data)
+        : data,
   };
 
   return new Promise((resolve, reject) => {
@@ -58,14 +63,14 @@ async function sendPostRequest(url, data) {
  * 使用 AK、SK 生成鉴权签名（Access Token）
  * @return {Promise<string>} 鉴权签名信息（Access Token）
  */
-function getAccessToken() {
+function getAccessToken(modalType) {
   const options = {
     method: "POST",
     url: "https://aip.baidubce.com/oauth/2.0/token",
     qs: {
       grant_type: "client_credentials",
-      client_id: config.client_id,
-      client_secret: config.client_secret,
+      client_id: config[modalType].client_id,
+      client_secret: config[modalType].client_secret,
     },
   };
 
@@ -81,21 +86,3 @@ function getAccessToken() {
 }
 
 module.exports = http;
-
-// // 示例用法
-// const apiUrl =
-//   "https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/text2image/sd_xl";
-// const requestData = {
-//   size: "1024x1024",
-//   n: 1,
-//   steps: 20,
-//   sampler_index: "Euler a",
-// };
-
-// sendPostRequest(apiUrl, requestData)
-//   .then((response) => {
-//     console.log("Response:", response);
-//   })
-//   .catch((error) => {
-//     console.error("Error:", error);
-//   });

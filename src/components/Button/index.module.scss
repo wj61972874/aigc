@@ -1,0 +1,18 @@
+.button_primary {
+    border-radius: 30px;
+    // border: 1px solid #FFFDF4;
+    background: linear-gradient(88deg, #F4DFCB -10.02%, #EDCEA0 103.5%);
+    line-height: normal;
+    color: #A70000;
+    font-weight: 600;
+}
+
+.button_neutral {
+    border-radius: 30px;
+    border: 1px solid #DED3BE;
+    background: rgba(255, 255, 255, 0.70);
+    backdrop-filter: blur(6px);
+    line-height: normal;
+    color: #936E43;
+
+}

@@ -1,0 +1,30 @@
+.generate_panel {
+    .img_container {
+        height: 85%;
+    }
+
+    .main_img {
+        height: 76%;
+
+    }
+
+    .select_body {
+        display: grid;
+        grid-template-columns: repeat(3, 30%);
+
+        img {
+            width: calc((100vw - 76px) / 3);
+            height: calc((100vw - 76px) / 3);
+        }
+    }
+
+    .generate_remind {
+        color: #987553;
+
+        font-family: "PingFang SC";
+        font-style: normal;
+        font-weight: 400;
+        line-height: 22px;
+        /* 157.143% */
+    }
+}
