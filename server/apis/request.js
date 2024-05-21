@@ -25,7 +25,7 @@ const errorRes = {
  */
 async function sendPostRequest(url, data, modalType, httpOptions) {
   const accessToken = await getAccessToken(modalType);
-  const { headers } = httpOptions;
+  const { headers } = httpOptions || {};
   const options = {
     method: "POST",
     url: url + "?access_token=" + accessToken,
