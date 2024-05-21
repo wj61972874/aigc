@@ -25,7 +25,8 @@ const errorRes = {
  */
 async function sendPostRequest(url, data, modalType, httpOptions) {
   const accessToken = await getAccessToken(modalType);
-  const { headers } = httpOptions || {};
+  let headers = httpOptions?.headers || {};
+  console.log("--headers", headers);
   const options = {
     method: "POST",
     url: url + "?access_token=" + accessToken,
@@ -35,16 +36,17 @@ async function sendPostRequest(url, data, modalType, httpOptions) {
       ...headers,
     },
     [config[modalType].apiContentType]:
-      config[modalType] === MODAL_TYPE_ENUM.CONTENT_GENERATE
+      modalType === MODAL_TYPE_ENUM.CONTENT_GENERATE
         ? JSON.stringify(data)
         : data,
   };
+  console.log("--options", options);
 
   return new Promise((resolve, reject) => {
     request(options, (error, response) => {
       if (error) {
         // reject(errorRes);
-        console.log("--reject error-", errorRes);
+        console.log("--reject error-", error);
         resolve(errorRes);
       } else {
         console.log("--response-", response?.body);
