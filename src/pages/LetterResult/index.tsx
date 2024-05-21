@@ -2,18 +2,17 @@ import { apiGeneratePoem } from "@/services";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./index.module.scss";
-import { FANS_LETTER_PROMPTS, FANS_LETTER_QUESTIONS } from "@/contants";
+import { FANS_LETTER_PROMPTS } from "@/contants";
 import orderBy from "lodash/orderBy";
-import html2canvas from "html2canvas";
 import domtoimage from "dom-to-image";
 import Button from "@/components/Button";
 import CircularProgressBar from "@/components/CircularProgressBar";
 import { useRecoilValue } from "recoil";
 import { questionState } from "@/store/fansLetter";
 import result_bg from "@/assets/image/letterRes_bg.png";
-import result_border from "@/assets/image/res_border.png";
 import GeneratePanel from "./GeneratePanel";
 import classNames from "classnames";
+import { get, set } from "idb-keyval";
 
 export default function LetterResult() {
   const navigator = useNavigate();
@@ -99,17 +98,41 @@ export default function LetterResult() {
         width: docEl.offsetWidth,
         scale: 2,
       })
-      .then(function (dataUrl) {
+      .then(async function (dataUrl) {
         var img = new Image();
         img.src = dataUrl;
-        // document.body.appendChild(img);
-        localStorage.setItem("generatedImgs", JSON.stringify([dataUrl]));
+
+        let _generatedImgs = await get("generatedImgs");
+
+        if (!_generatedImgs) {
+          _generatedImgs = [];
+        }
+
+        _generatedImgs.push(dataUrl);
+
+        // localStorage.setItem("generatedImgs", JSON.stringify(_generatedImgs));
+
         setimage(dataUrl);
+
+        console.log("杰哥测试p----", _generatedImgs);
+        set("generatedImgs", _generatedImgs)
+          .then(() => console.log("It worked!"))
+          .catch((err) => console.log("It failed!", err));
       })
       .catch(function (error) {
         console.error("oops, something went wrong!", error);
       });
   };
+
+  //重新生成-在现有问题选择上
+  const handleDoGenerateAgain = () => {
+    setimage("");
+    setProgress(0);
+    generateLetter();
+  };
+
+  //重新生成-重新选择问题
+  // const handleDoGenerateAgain = () => {};
 
   return (
     <div className={(styles["letter_result"], "w-full h-full bg-[#F7F8FA]")}>
@@ -160,27 +183,7 @@ export default function LetterResult() {
           </div>
         </>
       ) : (
-        // <>
-        //   {image ? (
-        <GeneratePanel />
-        //   ) : (
-        //     <div className="relative">
-        //       <div className="relative w-[375px] h-[730px]" ref={resultRef}>
-        //         <img src={result_bg} className="w-full h-full object-fill " />
-        //         <div
-        //           className={classNames(
-        //             styles["letter_text"],
-        //             "py-[90px] px-[50px] text-[14px]"
-        //           )}
-        //           dangerouslySetInnerHTML={{
-        //             __html: letterContents.replace(/\n/g, "<br>"),
-        //           }}
-        //         />
-        //       </div>
-        //       <div className="absolute top-0 left-0 w-full h-full bg-[#F7F8FA]" />
-        //     </div>
-        //   )}
-        // </>
+        <GeneratePanel doGenerateAgain={handleDoGenerateAgain} />
       )}
     </div>
   );

@@ -16,3 +16,16 @@
     color: #936E43;
 
 }
+
+.button_blur {
+    border-radius: 30px;
+    background: rgba(255, 255, 255, 0.90);
+    color: #936E43;
+    line-height: normal;
+}
+
+.btn_disabled {
+    background: #F0F0F0 !important;
+    border: unset !important;
+    color: #B5AEA5 !important;
+}
