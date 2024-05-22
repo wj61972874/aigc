@@ -29,6 +29,16 @@ export default function LetterResult() {
 
   const [image, setimage] = useState<string>("");
 
+  const [isImageLoaded, setIsImageLoaded] = useState(false);
+
+  useEffect(() => {
+    const img = new Image();
+    img.src = result_bg;
+    img.onload = () => {
+      setIsImageLoaded(true);
+    };
+  }, []);
+
   useEffect(() => {
     if (questionAnswer) {
       generateLetter();
@@ -72,13 +82,19 @@ export default function LetterResult() {
       setLetterContents(res.result);
       setProgress(100); // 请求完成，设置进度为 100%
       clearInterval(progressTimer); // 清除定时器
-      setTimeout(() => {
-        doHtmlToCanvas();
-      }, 500);
+      // setTimeout(() => {
+      //   doHtmlToCanvas();
+      // }, 500);
     } catch (err) {
       console.log("generateLetter--err-", err);
     }
   };
+
+  useEffect(() => {
+    if (progress === 100 && isImageLoaded) {
+      doHtmlToCanvas();
+    }
+  }, [progress, isImageLoaded]);
 
   useEffect(() => {
     // 组件卸载时清除定时器
