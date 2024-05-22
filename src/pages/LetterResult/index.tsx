@@ -29,16 +29,6 @@ export default function LetterResult() {
 
   const [image, setimage] = useState<string>("");
 
-  const [isImageLoaded, setIsImageLoaded] = useState(false);
-
-  useEffect(() => {
-    const img = new Image();
-    img.src = result_bg;
-    img.onload = () => {
-      setIsImageLoaded(true);
-    };
-  }, []);
-
   useEffect(() => {
     if (questionAnswer) {
       generateLetter();
@@ -82,19 +72,13 @@ export default function LetterResult() {
       setLetterContents(res.result);
       setProgress(100); // 请求完成，设置进度为 100%
       clearInterval(progressTimer); // 清除定时器
-      // setTimeout(() => {
-      //   doHtmlToCanvas();
-      // }, 500);
+      setTimeout(() => {
+        doHtmlToCanvas();
+      }, 500);
     } catch (err) {
       console.log("generateLetter--err-", err);
     }
   };
-
-  useEffect(() => {
-    if (progress === 100 && isImageLoaded) {
-      doHtmlToCanvas();
-    }
-  }, [progress, isImageLoaded]);
 
   useEffect(() => {
     // 组件卸载时清除定时器
@@ -115,25 +99,33 @@ export default function LetterResult() {
         scale: 2,
       })
       .then(async function (dataUrl) {
-        var img = new Image();
-        img.src = dataUrl;
+        domtoimage
+          .toPng(docEl, {
+            height: docEl.offsetHeight,
+            width: docEl.offsetWidth,
+            scale: 2,
+          })
+          .then(async function (dataUrl) {
+            let _generatedImgs = await get("generatedImgs");
 
-        let _generatedImgs = await get("generatedImgs");
+            if (!_generatedImgs) {
+              _generatedImgs = [];
+            }
 
-        if (!_generatedImgs) {
-          _generatedImgs = [];
-        }
+            _generatedImgs.push(dataUrl);
 
-        _generatedImgs.push(dataUrl);
+            // localStorage.setItem("generatedImgs", JSON.stringify(_generatedImgs));
 
-        // localStorage.setItem("generatedImgs", JSON.stringify(_generatedImgs));
+            setimage(dataUrl);
 
-        setimage(dataUrl);
-
-        console.log("杰哥测试p----", _generatedImgs);
-        set("generatedImgs", _generatedImgs)
-          .then(() => console.log("It worked!"))
-          .catch((err) => console.log("It failed!", err));
+            console.log("杰哥测试p----", _generatedImgs);
+            set("generatedImgs", _generatedImgs)
+              .then(() => console.log("It worked!"))
+              .catch((err) => console.log("It failed!", err));
+          })
+          .catch(function (error) {
+            console.error("oops, something went wrong!", error);
+          });
       })
       .catch(function (error) {
         console.error("oops, something went wrong!", error);
