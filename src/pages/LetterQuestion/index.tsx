@@ -162,15 +162,22 @@ export default function LetterQuestionPage() {
       case "textarea":
         return (
           <>
-            <textarea
-              className={styles["cus_textarea"]}
-              maxLength={item.maxLength}
-              value={otherInfo?.otherContent}
-              onChange={(e) => {
-                setOtherInfo({ ...otherInfo, otherContent: e.target.value });
-                handleSetChoose(item, e.target.value);
-              }}
-            />
+            <div className="relative">
+              <textarea
+                className={styles["cus_textarea"]}
+                maxLength={item.maxLength}
+                value={otherInfo?.otherContent}
+                placeholder="请输入想说的话，限30字"
+                onChange={(e) => {
+                  setOtherInfo({ ...otherInfo, otherContent: e.target.value });
+                  handleSetChoose(item, e.target.value);
+                }}
+              />
+              <span className={styles["max_number"]}>
+                {otherInfo?.otherContent?.length || 0} / {item.maxLength}
+              </span>
+            </div>
+
             {contentCheckError?.otherContent && (
               <span style={{ color: "red" }}>
                 {contentCheckError.otherContent}
@@ -196,6 +203,7 @@ export default function LetterQuestionPage() {
               className={styles["cus_input"]}
               maxLength={item.maxLength}
               value={otherInfo?.byName}
+              placeholder="请输入名称，限10字"
               onChange={(e) => {
                 setOtherInfo({
                   ...otherInfo,
@@ -211,10 +219,6 @@ export default function LetterQuestionPage() {
         );
     }
   };
-
-  const backgroundImage = letterContents
-    ? "https://images.unsplash.com/photo-1708710301741-bc45608e51b1?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=1080&ixid=MnwxfDB8MXxyYW5kb218MHx8fHx8fHx8MTcxNDA0MjUwMg&ixlib=rb-4.0.3&q=80&w=375"
-    : "https://static.ws.126.net/163/f2e/news/2019_poem/static/images/loading_bg.40a0a4a.jpg";
 
   return (
     <div
@@ -262,7 +266,7 @@ export default function LetterQuestionPage() {
                       Q{`${index + 1}`}
                     </div>
                     <div className={styles["divide_line"]} />
-                    <div className="text-base text-[#936E43] font-medium">
+                    <div className="text-base text-[#936E43] font-medium mb-3">
                       {item.question}
                     </div>
                     {renderAnswerPenal(item)}

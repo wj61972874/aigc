@@ -210,29 +210,31 @@ export default function LetterResult() {
               停止并返回
             </Button>
           </div>
-          <div className="relative">
-            <div className="relative w-[375px] h-[730px]" ref={resultRef}>
-              <img
-                src={RESULT_BG_MAP[choosedBg]?.imgSrc}
-                className="w-full h-full object-fill "
-              />
-              <div
-                className={classNames(
-                  styles["letter_text"],
-                  `py-[${RESULT_BG_MAP[choosedBg]?.padding?.y}px] px-[${RESULT_BG_MAP[choosedBg]?.padding?.x}px] text-[14px]`
-                )}
-                dangerouslySetInnerHTML={{
-                  __html:
-                    letterContents.replace(
-                      /\n\n/g,
-                      "<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-                    ) +
-                    `<span style="text-align: right; display:inline-block;width:100% ">—— ${writter}</span>`,
-                }}
-              />
+          {letterContents && (
+            <div className="relative">
+              <div className="relative w-[375px] h-[730px]" ref={resultRef}>
+                <img
+                  src={RESULT_BG_MAP[choosedBg]?.imgSrc}
+                  className="w-full h-full object-fill "
+                />
+                <div
+                  className={classNames(
+                    styles["letter_text"],
+                    `py-[106px] px-[56px] text-[14px]`
+                  )}
+                  dangerouslySetInnerHTML={{
+                    __html:
+                      letterContents.replace(
+                        /\n\n/g,
+                        "<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+                      ) +
+                      `<span style="text-align: right; display:inline-block;width:100% ">—— ${writter}</span>`,
+                  }}
+                />
+              </div>
+              <div className="absolute top-0 left-0 w-full h-full bg-[#F7F8FA]" />
             </div>
-            <div className="absolute top-0 left-0 w-full h-full bg-[#F7F8FA]" />
-          </div>
+          )}
         </>
       ) : (
         <GeneratePanel doGenerateAgain={handleDoGenerateAgain} />
