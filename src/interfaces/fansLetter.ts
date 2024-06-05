@@ -1,4 +1,4 @@
 export interface IOtherInfo {
   otherContent?: string;
-  byName: string;
+  byName?: string;
 }

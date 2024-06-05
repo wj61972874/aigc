@@ -6,12 +6,16 @@ import CHECK_ICON from "@/assets/icon/check_icon.svg";
 import LEFT_ICON from "@/assets/icon/left_icon.svg";
 import RIGHT_ICON from "@/assets/icon/right_icon.svg";
 import { get } from "idb-keyval";
+import Modal from "@/components/Modal";
+import MODAL_ICON from "@/assets/icon/modal_icon.svg";
 
 export default function GeneratePanel({
   doGenerateAgain,
 }: {
   doGenerateAgain: () => void;
 }) {
+  const [modalVisable, setModalVisable] = useState<boolean>(false);
+
   const containerRef = useRef<any>(null);
 
   const imageRefs = useRef([]);
@@ -54,31 +58,9 @@ export default function GeneratePanel({
     imageRefs.current[index] = ref;
   };
 
-  //   useEffect(() => {
-  //     console.log(`这是第${currentImgIndex + 1}张图片`);
-  //   }, [currentImgIndex]);
-
-  //   const handlePrevClick = () => {
-  //     const container = containerRef.current;
-  //     const imageWidth = container.offsetWidth;
-  //     container.scrollBy({
-  //       left: -imageWidth,
-  //       behavior: "smooth",
-  //     });
-  //     setCurrentImgIndex((prevIndex) => Math.max(prevIndex - 1, 0));
-  //   };
-
-  //   const handleNextClick = () => {
-  //     const container = containerRef.current;
-  //     const imageWidth = container.offsetWidth;
-  //     container.scrollBy({
-  //       left: imageWidth,
-  //       behavior: "smooth",
-  //     });
-  //     setCurrentImgIndex((prevIndex) =>
-  //       Math.min(prevIndex + 1, generatedImgArr.length - 1)
-  //     );
-  //   };
+  const handleComplete = () => {
+    setModalVisable(true);
+  };
   return (
     <div className={classNames(styles["generate_panel"], "w-full h-full")}>
       {!showFullScreen ? (
@@ -151,7 +133,12 @@ export default function GeneratePanel({
               >
                 再次生成
               </Button>
-              <Button className={styles["complete_btn"]}>完成</Button>
+              <Button
+                className={styles["complete_btn"]}
+                onClick={handleComplete}
+              >
+                完成
+              </Button>
             </div>
           </div>
         </div>
@@ -173,7 +160,7 @@ export default function GeneratePanel({
           <div className={styles["arrow_btn_right"]} onClick={handleNextClick}>
             <img src={RIGHT_ICON} />
           </div>
-          <div className="w-full flex justify-between mt-[10px] fixed bottom-3">
+          <div className="w-full flex justify-between mt-[10px] fixed bottom-3 px-5">
             <Button
               className={classNames(styles["back_btn"], "mr-3")}
               type="neutral"
@@ -183,10 +170,34 @@ export default function GeneratePanel({
             >
               返回
             </Button>
-            <Button className={styles["complete_btn"]}>完成</Button>
+            <Button className={styles["complete_btn"]} onClick={handleComplete}>
+              完成
+            </Button>
           </div>
         </div>
       )}
+      <Modal
+        open={modalVisable}
+        onClose={() => {
+          setModalVisable(false);
+        }}
+      >
+        <div className={styles["content"]}>
+          <img src={MODAL_ICON} className={styles["modal_icon"]} />
+          <div className={styles["title"]}>信件发送成功</div>
+          <div className={styles["desc"]}>
+            说明文字说明文字说明文字说明文字说明文字说明文字说明文字说明文字说明文字说明文字成功
+          </div>
+          <div className={styles["modal_footer"]}>
+            <Button type="neutral" size="small" className={styles["save_btn"]}>
+              保存图片
+            </Button>
+            <Button size="small" className={styles["other_btn"]}>
+              领取专属优惠券
+            </Button>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 }

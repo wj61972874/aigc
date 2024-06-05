@@ -132,6 +132,8 @@ export const FANS_LETTER_QUESTIONS = [
     id: 6,
     require: false,
     question: "你对刘岩有没有什么特别的话要说？",
+    prePrompt: "请在信件内容最后原原本本插入下面这句话-我想对你说：",
+    promptSort: 6,
     componentType: "textarea",
     maxLength: 30,
     answers: [],
@@ -162,7 +164,7 @@ export const FANS_LETTER_QUESTIONS = [
   },
   {
     id: 8,
-    require: true,
+    require: false,
     question: "落款的人名",
     componentType: "input",
     maxLength: 10,

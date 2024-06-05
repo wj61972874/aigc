@@ -30,9 +30,11 @@ export default function LetterQuestionPage() {
 
   const [isAnimated, setIsAnimated] = useState(false);
 
-  const [otherInfo, setOtherInfo] = useState<IOtherInfo>();
+  const [otherInfo, setOtherInfo] = useState<IOtherInfo>({});
 
   const [contentCheckError, setContentCheckError] = useState<IOtherInfo>(null);
+
+  const [unAnsweredQuestions, setUnAnsweredQuestions] = useState<any[]>([]);
 
   useEffect(() => {
     if (letterContents) {
@@ -47,6 +49,10 @@ export default function LetterQuestionPage() {
   }, [letterContents]); // 空依赖数组确保只运行一次
 
   const handleSetChoose = (item, choose) => {
+    setUnAnsweredQuestions((preData) => {
+      const _newData = preData.filter((i) => i.id !== item.id);
+      return _newData;
+    });
     const _answers = [...answers];
     if (_answers.some((i) => i.id === item.id)) {
       //如果_answers有item.id,则覆盖
@@ -75,6 +81,7 @@ export default function LetterQuestionPage() {
   const preSubmitAndCheck = async () => {
     const unAnsweredQuestions = checkRequiredQuestions();
     console.log("checkRequiredQuestions----222", unAnsweredQuestions);
+    setUnAnsweredQuestions(unAnsweredQuestions);
     if (unAnsweredQuestions.length) {
       const anchorId = unAnsweredQuestions[0].id;
       if (questionRefs.current[anchorId]) {
@@ -161,6 +168,7 @@ export default function LetterQuestionPage() {
               value={otherInfo?.otherContent}
               onChange={(e) => {
                 setOtherInfo({ ...otherInfo, otherContent: e.target.value });
+                handleSetChoose(item, e.target.value);
               }}
             />
             {contentCheckError?.otherContent && (
@@ -242,7 +250,13 @@ export default function LetterQuestionPage() {
                     key={index}
                     id={`Q${index + 1}`}
                     ref={(el) => (questionRefs.current[index + 1] = el)}
-                    className={styles["question_item"]}
+                    className={classNames(
+                      {
+                        [styles["question_item_error"]]:
+                          !!unAnsweredQuestions.find((i) => i.id === item.id),
+                      },
+                      styles["question_item"]
+                    )}
                   >
                     <div className="text-[34px] text-[#940A0A]">
                       Q{`${index + 1}`}

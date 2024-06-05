@@ -20,11 +20,17 @@ export default function Button({
   children,
 }: IButtonProps) {
   const [buttonTypeStyles, setButtonTypeStyles] = useState<string>("");
+  const [buttonSizeStyles, setButtonSizeStyles] = useState<string>("");
 
   useEffect(() => {
     console.log(type);
     handleSetStylesByType(type);
   }, [type]);
+
+  useEffect(() => {
+    console.log(size);
+    handleSetStylesBySize(size);
+  }, [size]);
 
   //设置按钮type样式
   const handleSetStylesByType = (type: string) => {
@@ -44,6 +50,24 @@ export default function Button({
     }
   };
 
+  //设置按钮大小样式
+  const handleSetStylesBySize = (size: string) => {
+    switch (size) {
+      case "large":
+        setButtonSizeStyles(styles["button_size_large"]);
+        break;
+      case "default":
+        setButtonSizeStyles(styles["button_size_default"]);
+        break;
+      case "small":
+        setButtonSizeStyles("py-1 px-5 text-[14px]");
+        break;
+      default:
+        setButtonSizeStyles("button_size_default");
+        break;
+    }
+  };
+
   return (
     <div
       className={classNames(
@@ -51,6 +75,7 @@ export default function Button({
         styles["cus_button"],
         "w-fit py-3 px-10 text-center",
         buttonTypeStyles,
+        buttonSizeStyles,
         className
       )}
       onClick={(e) => {

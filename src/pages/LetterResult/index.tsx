@@ -9,10 +9,19 @@ import Button from "@/components/Button";
 import CircularProgressBar from "@/components/CircularProgressBar";
 import { useRecoilValue } from "recoil";
 import { questionState } from "@/store/fansLetter";
-import result_bg from "@/assets/image/letterRes_bg.png";
+import result_bg_a from "@/assets/image/result_bg_a.png";
+import result_bg_b from "@/assets/image/result_bg_b.png";
+import result_bg_c from "@/assets/image/result_bg_c.png";
 import GeneratePanel from "./GeneratePanel";
 import classNames from "classnames";
 import { get, set } from "idb-keyval";
+import { isString } from "lodash";
+
+const RESULT_BG_MAP = {
+  A: { imgSrc: result_bg_a, padding: { x: 56, y: 106 } },
+  B: { imgSrc: result_bg_b, padding: { x: 56, y: 106 } },
+  C: { imgSrc: result_bg_c, padding: { x: 56, y: 106 } },
+};
 
 export default function LetterResult() {
   const navigator = useNavigate();
@@ -27,11 +36,27 @@ export default function LetterResult() {
 
   const [timer, setTimer] = useState<any>(null);
 
-  const [image, setimage] = useState<string>("");
+  const [generate, setGenerate] = useState<boolean>(false);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const value = await get("generatedImgs");
+      setGenerate(value && value.length === 3);
+    };
+
+    fetchData();
+  }, []);
+
+  const [choosedBg, setChoosedBg] = useState<string>("");
+
+  const [writter, setWritter] = useState<string>("一个默默支持你的粉丝");
 
   useEffect(() => {
     if (questionAnswer) {
+      console.log("questionAnswer----", questionAnswer);
       generateLetter();
+      const questionTemplate = questionAnswer.find((i) => i.id === 4);
+      setChoosedBg(questionTemplate?.chooseAnswer?.option);
     }
   }, [questionAnswer]);
 
@@ -40,13 +65,16 @@ export default function LetterResult() {
       setProgress(0); // 重置进度为 0
       const _answers = questionAnswer.filter((i) => !!i.promptSort);
       const finalAnswer = orderBy(_answers, ["promptSort"], "desc");
+      console.log("发送生成信息----", finalAnswer);
       let info = "";
       finalAnswer.forEach((i, index) => {
         if (i.promptSort) {
           info += `${i?.prePrompt}`;
         }
-        if (i.chooseAnswer.answer) {
-          info += `${i.chooseAnswer.answer}`;
+        if (i.chooseAnswer) {
+          info += isString(i.chooseAnswer)
+            ? i.chooseAnswer
+            : `${i.chooseAnswer.answer}`;
         }
         if (i.sufPrompt) {
           info += `${i?.sufPrompt}`;
@@ -55,6 +83,14 @@ export default function LetterResult() {
           info += `,`;
         }
       });
+      const _writter = questionAnswer.find((i) => i.id === 8)?.chooseAnswer;
+      console.log("发送生成信息----_writter", _writter);
+      if (_writter) {
+        setWritter(_writter);
+      }
+
+      info +=
+        "。注意：信件正文后面不需要写信日期，不需要人名落款，不要出现你的名字，不要出现任何提示词，不要出现任何替代字符！";
       const messages = `${FANS_LETTER_PROMPTS},${info}`;
       const data = {
         type: 2,
@@ -116,7 +152,7 @@ export default function LetterResult() {
 
             // localStorage.setItem("generatedImgs", JSON.stringify(_generatedImgs));
 
-            setimage(dataUrl);
+            setGenerate(true);
 
             console.log("杰哥测试p----", _generatedImgs);
             set("generatedImgs", _generatedImgs)
@@ -134,7 +170,7 @@ export default function LetterResult() {
 
   //重新生成-在现有问题选择上
   const handleDoGenerateAgain = () => {
-    setimage("");
+    setGenerate(false);
     setProgress(0);
     generateLetter();
   };
@@ -144,7 +180,7 @@ export default function LetterResult() {
 
   return (
     <div className={(styles["letter_result"], "w-full h-full bg-[#F7F8FA]")}>
-      {!image ? (
+      {!generate ? (
         <>
           <div className="h-full w-full flex flex-col items-center absolute z-10">
             <CircularProgressBar
@@ -176,14 +212,22 @@ export default function LetterResult() {
           </div>
           <div className="relative">
             <div className="relative w-[375px] h-[730px]" ref={resultRef}>
-              <img src={result_bg} className="w-full h-full object-fill " />
+              <img
+                src={RESULT_BG_MAP[choosedBg]?.imgSrc}
+                className="w-full h-full object-fill "
+              />
               <div
                 className={classNames(
                   styles["letter_text"],
-                  "py-[90px] px-[50px] text-[14px]"
+                  `py-[${RESULT_BG_MAP[choosedBg]?.padding?.y}px] px-[${RESULT_BG_MAP[choosedBg]?.padding?.x}px] text-[14px]`
                 )}
                 dangerouslySetInnerHTML={{
-                  __html: letterContents.replace(/\n/g, "<br>"),
+                  __html:
+                    letterContents.replace(
+                      /\n\n/g,
+                      "<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+                    ) +
+                    `<span style="text-align: right; display:inline-block;width:100% ">—— ${writter}</span>`,
                 }}
               />
             </div>

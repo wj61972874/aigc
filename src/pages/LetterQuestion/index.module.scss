@@ -19,6 +19,7 @@
             background-color: #fff;
             border-radius: 12px;
             box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.10);
+            border: 1px solid transparent;
 
             .choosed_question {
                 background: #D54C4D;
@@ -76,6 +77,13 @@
                 width: 100%;
             }
         }
+
+        .question_item_error {
+            border-color: #D54C4D;
+        }
+
+
+
     }
 }
 
