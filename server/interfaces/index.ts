@@ -1,4 +1,0 @@
-enum TextGenerteType {
-  "success",
-  "error",
-}
