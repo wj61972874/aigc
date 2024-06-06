@@ -1,3 +1,13 @@
+import result_bg_a from "@/assets/image/result_bg_a.png";
+import result_bg_b from "@/assets/image/result_bg_b.png";
+import result_bg_c from "@/assets/image/result_bg_c.png";
+import person_a from "@/assets/image/person_a.png";
+import person_b from "@/assets/image/person_b.png";
+import person_c from "@/assets/image/person_c.png";
+import person_d from "@/assets/image/person_d.png";
+import person_e from "@/assets/image/person_e.png";
+import person_f from "@/assets/image/person_f.png";
+
 export const RECEVIER = "刘岩";
 export const LETTERS_MAXLENGTH = 200;
 
@@ -45,20 +55,20 @@ export const FANS_LETTER_QUESTIONS = [
       },
       {
         option: "C",
-        answer: "《唐人街探案》",
+        answer: "《聂小倩与宁采臣》",
       },
       {
         option: "D",
-        answer: "《女神在看》",
+        answer: "《虎门销烟》",
       },
 
       {
         option: "E",
-        answer: "《世界的尽头》",
+        answer: "《嫌疑人X的献身》",
       },
       {
         option: "F",
-        answer: "《嫌疑人X的献身》",
+        answer: "《隐秘的角落》",
       },
     ],
   },
@@ -171,3 +181,18 @@ export const FANS_LETTER_QUESTIONS = [
     answers: [],
   },
 ];
+
+export const RESULT_BG_MAP = {
+  A: { imgSrc: result_bg_a, padding: { x: 56, y: 106 } },
+  B: { imgSrc: result_bg_b, padding: { x: 56, y: 106 } },
+  C: { imgSrc: result_bg_c, padding: { x: 56, y: 106 } },
+};
+
+export const RESULT_PERSON_MAP = {
+  A: { imgSrc: person_a, padding: { x: 56, y: 106 } },
+  B: { imgSrc: person_b, padding: { x: 56, y: 106 } },
+  C: { imgSrc: person_c, padding: { x: 56, y: 106 } },
+  D: { imgSrc: person_d, padding: { x: 56, y: 106 } },
+  E: { imgSrc: person_e, padding: { x: 56, y: 106 } },
+  F: { imgSrc: person_f, padding: { x: 56, y: 106 } },
+};

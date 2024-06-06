@@ -2,26 +2,30 @@ import { apiGeneratePoem } from "@/services";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./index.module.scss";
-import { FANS_LETTER_PROMPTS } from "@/contants";
+import {
+  FANS_LETTER_PROMPTS,
+  RESULT_BG_MAP,
+  RESULT_PERSON_MAP,
+} from "@/contants";
 import orderBy from "lodash/orderBy";
 import domtoimage from "dom-to-image";
 import Button from "@/components/Button";
 import CircularProgressBar from "@/components/CircularProgressBar";
 import { useRecoilValue } from "recoil";
 import { questionState } from "@/store/fansLetter";
-import result_bg_a from "@/assets/image/result_bg_a.png";
-import result_bg_b from "@/assets/image/result_bg_b.png";
-import result_bg_c from "@/assets/image/result_bg_c.png";
+// import result_bg_a from "@/assets/image/result_bg_a.png";
+// import result_bg_b from "@/assets/image/result_bg_b.png";
+// import result_bg_c from "@/assets/image/result_bg_c.png";
 import GeneratePanel from "./GeneratePanel";
 import classNames from "classnames";
 import { get, set } from "idb-keyval";
 import { isString } from "lodash";
 
-const RESULT_BG_MAP = {
-  A: { imgSrc: result_bg_a, padding: { x: 56, y: 106 } },
-  B: { imgSrc: result_bg_b, padding: { x: 56, y: 106 } },
-  C: { imgSrc: result_bg_c, padding: { x: 56, y: 106 } },
-};
+// const RESULT_BG_MAP = {
+//   A: { imgSrc: result_bg_a, padding: { x: 56, y: 106 } },
+//   B: { imgSrc: result_bg_b, padding: { x: 56, y: 106 } },
+//   C: { imgSrc: result_bg_c, padding: { x: 56, y: 106 } },
+// };
 
 export default function LetterResult() {
   const navigator = useNavigate();
@@ -48,6 +52,7 @@ export default function LetterResult() {
   }, []);
 
   const [choosedBg, setChoosedBg] = useState<string>("");
+  const [choosedPerson, setChoosedPerson] = useState<string>("");
 
   const [writter, setWritter] = useState<string>("一个默默支持你的粉丝");
 
@@ -55,8 +60,11 @@ export default function LetterResult() {
     if (questionAnswer) {
       console.log("questionAnswer----", questionAnswer);
       generateLetter();
+      const questionPerson = questionAnswer.find((i) => i.id === 2);
       const questionTemplate = questionAnswer.find((i) => i.id === 4);
+
       setChoosedBg(questionTemplate?.chooseAnswer?.option);
+      setChoosedPerson(questionPerson?.chooseAnswer?.option);
     }
   }, [questionAnswer]);
 
@@ -215,8 +223,13 @@ export default function LetterResult() {
               <div className="relative w-[375px] h-[730px]" ref={resultRef}>
                 <img
                   src={RESULT_BG_MAP[choosedBg]?.imgSrc}
-                  className="w-full h-full object-fill "
+                  className="w-full h-full object-fill"
                 />
+                <img
+                  src={RESULT_PERSON_MAP[choosedPerson]?.imgSrc}
+                  className="w-[64%] object-cover absolute bottom-0 left-0"
+                />
+
                 <div
                   className={classNames(
                     styles["letter_text"],
