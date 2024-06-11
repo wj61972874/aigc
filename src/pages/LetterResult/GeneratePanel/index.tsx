@@ -11,8 +11,10 @@ import MODAL_ICON from "@/assets/icon/modal_icon.svg";
 
 export default function GeneratePanel({
   doGenerateAgain,
+  doReAnswer,
 }: {
   doGenerateAgain: () => void;
+  doReAnswer: () => void;
 }) {
   const [modalVisable, setModalVisable] = useState<boolean>(false);
 
@@ -125,6 +127,13 @@ export default function GeneratePanel({
               )}
             >{`总共可生成3次（还剩${3 - generatedImgArr.length}次）`}</div>
             <div className="w-full flex justify-between mt-[10px]">
+              <Button
+                className={classNames(styles["again_btn"], "mr-3")}
+                type="neutral"
+                onClick={doReAnswer}
+              >
+                重新答题
+              </Button>
               <Button
                 className={classNames(styles["again_btn"], "mr-3")}
                 type="neutral"

@@ -18,7 +18,7 @@ import { questionState } from "@/store/fansLetter";
 // import result_bg_c from "@/assets/image/result_bg_c.png";
 import GeneratePanel from "./GeneratePanel";
 import classNames from "classnames";
-import { get, set } from "idb-keyval";
+import { clear, get, set } from "idb-keyval";
 import { isString } from "lodash";
 
 // const RESULT_BG_MAP = {
@@ -98,7 +98,9 @@ export default function LetterResult() {
       }
 
       info +=
-        "。注意：信件正文后面不需要写信日期，不需要人名落款，不要出现你的名字，不要出现任何提示词，不要出现任何替代字符！";
+        // "。注意：信件生成结果不需要写信日期，不需要人名落款，不要出现/你的名字/、/正文结束/之类的占位提示词！！！，不要出现任何提示词，不要出现任何占位符！";
+        "。注意：信件生成结果不需要日期和人名落款的占位符提示词";
+
       const messages = `${FANS_LETTER_PROMPTS},${info}`;
       const data = {
         type: 2,
@@ -183,8 +185,11 @@ export default function LetterResult() {
     generateLetter();
   };
 
-  //重新生成-重新选择问题
-  // const handleDoGenerateAgain = () => {};
+  //重新选择问题
+  const handleReAnswer = async () => {
+    await clear();
+    navigator("/letterQuestion");
+  };
 
   return (
     <div className={(styles["letter_result"], "w-full h-full bg-[#F7F8FA]")}>
@@ -250,7 +255,10 @@ export default function LetterResult() {
           )}
         </>
       ) : (
-        <GeneratePanel doGenerateAgain={handleDoGenerateAgain} />
+        <GeneratePanel
+          doGenerateAgain={handleDoGenerateAgain}
+          doReAnswer={handleReAnswer}
+        />
       )}
     </div>
   );

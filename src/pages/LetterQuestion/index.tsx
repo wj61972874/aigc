@@ -16,6 +16,8 @@ import Button from "@/components/Button";
 import CircularProgressBar from "@/components/CircularProgressBar";
 import { useSetRecoilState } from "recoil";
 import { questionState } from "@/store/fansLetter";
+import { useCanGenerated } from "@/utils/fensLetter";
+import { clear } from "idb-keyval";
 
 export default function LetterQuestionPage() {
   const navigator = useNavigate();
@@ -35,6 +37,19 @@ export default function LetterQuestionPage() {
   const [contentCheckError, setContentCheckError] = useState<IOtherInfo>(null);
 
   const [unAnsweredQuestions, setUnAnsweredQuestions] = useState<any[]>([]);
+
+  if (useCanGenerated()) {
+    navigator("/letterResult");
+  }
+
+  // useEffect(() => {
+  //   clearGeneratedResult();
+  // }, []);
+
+  // //进入页面清除缓存
+  // const clearGeneratedResult = async () => {
+  //   await clear();
+  // };
 
   useEffect(() => {
     if (letterContents) {

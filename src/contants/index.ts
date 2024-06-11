@@ -11,7 +11,7 @@ import person_f from "@/assets/image/person_f.png";
 export const RECEVIER = "刘岩";
 export const LETTERS_MAXLENGTH = 200;
 
-export const FANS_LETTER_PROMPTS = `请帮我写一封给音乐剧演员${RECEVIER}的信，字数在${LETTERS_MAXLENGTH}字左右`;
+export const FANS_LETTER_PROMPTS = `请帮我写一封给音乐剧演员${RECEVIER}的非标准信件格式的信，不需要有任何信件日期和人名落款，字数在${LETTERS_MAXLENGTH}字左右`;
 
 export const FANS_LETTER_QUESTIONS = [
   {

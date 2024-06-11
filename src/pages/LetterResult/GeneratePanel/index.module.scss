@@ -91,22 +91,28 @@
             .other_btn {
                 flex: 1;
                 padding: 4px 16px !important;
+                display: flex;
+                align-items: center;
+                justify-content: center;
             }
         }
     }
 }
 
 .again_btn {
-    width: 50% !important;
+    flex: 1 !important;
+    padding: 12px 0 !important;
 }
 
 
 .back_btn {
-    width: 50% !important;
+    flex: 1 !important;
+    padding: 12px 0 !important;
 }
 
 .complete_btn {
-    width: 50% !important;
+    flex: 1 !important;
+    padding: 12px 0 !important;
 }
 
 .full_img_container {

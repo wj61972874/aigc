@@ -10,8 +10,65 @@
 
   .do_letter_btn {
     position: absolute;
-    bottom: 20px;
+    bottom: 40px;
     left: 50%;
     transform: translateX(-50%);
+  }
+
+  .rule_details_check {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: var(--text-2, #4E5969);
+    font-family: "PingFang SC";
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 22px;
+    width: 100%;
+    text-align: center;
+  }
+}
+
+.shake {
+  animation: animate 0.5s linear;
+}
+
+@keyframes animate {
+  10% {
+    transform: translateX(6px);
+  }
+
+  20% {
+    transform: translateX(-6px);
+  }
+
+  30% {
+    transform: translateX(4px);
+  }
+
+  40% {
+    transform: translateX(-4px);
+  }
+
+  50% {
+    transform: translateX(2px);
+  }
+
+  60% {
+    transform: translateX(-2px);
+  }
+
+  70% {
+    transform: translateX(1px);
+  }
+
+  80% {
+    transform: translateX(-1px);
+  }
+
+  100% {
+    transform: translateX(0);
   }
 }
