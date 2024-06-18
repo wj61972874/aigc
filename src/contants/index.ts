@@ -46,8 +46,8 @@ export const FANS_LETTER_QUESTIONS = [
     id: 2,
     require: true,
     question: "你最喜欢刘岩的音乐剧是？",
-    prePrompt: "尽量可以引用刘岩的音乐剧",
-    sufPrompt: "一句台词",
+    prePrompt: "最喜欢的音乐剧是",
+    sufPrompt: "，尽量引用该剧中的一句台词",
     promptSort: 6,
     componentType: "select",
     answers: [
@@ -159,7 +159,7 @@ export const FANS_LETTER_QUESTIONS = [
     require: true,
     question: "观看刘岩的年份",
     componentType: "options",
-    prePrompt: "第一次看他的话剧是在",
+    prePrompt: "初识刘岩老师是",
     sufPrompt: "年",
     promptSort: 7,
     answers: [

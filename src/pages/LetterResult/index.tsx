@@ -97,9 +97,8 @@ export default function LetterResult() {
         setWritter(_writter);
       }
 
-      // info +=
-      //   // "。注意：信件生成结果不需要写信日期，不需要人名落款，不要出现/你的名字/、/正文结束/之类的占位提示词！！！，不要出现任何提示词，不要出现任何占位符！";
-      //   "。不需要署名和日期";
+      info +=
+        "。第一次观看话剧时间和最喜欢的话剧并无关联。祝福语希望能提到感谢或者祝福刘岩和白兰氏这个品牌";
 
       const questionTone = questionAnswer.find((i) => i.id === 3);
 
