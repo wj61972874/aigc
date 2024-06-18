@@ -11,7 +11,13 @@ import person_f from "@/assets/image/person_f.png";
 export const RECEVIER = "刘岩";
 export const LETTERS_MAXLENGTH = 200;
 
-export const FANS_LETTER_PROMPTS = `请帮我写一封给音乐剧演员${RECEVIER}的非标准信件格式的信，不需要有任何信件日期和人名落款，字数在${LETTERS_MAXLENGTH}字左右`;
+export const FANS_LETTER_PROMPTS = `请帮我写一封给音乐剧演员${RECEVIER}的非标准信件格式的信，不需要有日期和署名，不要生成任何占位符提示词，字数在${LETTERS_MAXLENGTH}字左右`;
+
+export const TONE_FOR_NAME = {
+  A: "刘岩老师",
+  B: "岩哥",
+  C: "刘岩老师",
+};
 
 export const FANS_LETTER_QUESTIONS = [
   {
@@ -42,7 +48,7 @@ export const FANS_LETTER_QUESTIONS = [
     question: "你最喜欢刘岩的音乐剧是？",
     prePrompt: "尽量可以引用刘岩的音乐剧",
     sufPrompt: "一句台词",
-    promptSort: 7,
+    promptSort: 6,
     componentType: "select",
     answers: [
       {
@@ -143,7 +149,7 @@ export const FANS_LETTER_QUESTIONS = [
     require: false,
     question: "你对刘岩有没有什么特别的话要说？",
     prePrompt: "请在信件内容最后原原本本插入下面这句话-我想对你说：",
-    promptSort: 6,
+    promptSort: 5,
     componentType: "textarea",
     maxLength: 30,
     answers: [],
@@ -153,6 +159,9 @@ export const FANS_LETTER_QUESTIONS = [
     require: true,
     question: "观看刘岩的年份",
     componentType: "options",
+    prePrompt: "第一次看他的话剧是在",
+    sufPrompt: "年",
+    promptSort: 7,
     answers: [
       {
         label: "2024",
@@ -169,6 +178,30 @@ export const FANS_LETTER_QUESTIONS = [
       {
         label: "2021",
         value: "2021",
+      },
+      {
+        label: "2020",
+        value: "2020",
+      },
+      {
+        label: "2019",
+        value: "2019",
+      },
+      {
+        label: "2018",
+        value: "2018",
+      },
+      {
+        label: "2017",
+        value: "2017",
+      },
+      {
+        label: "2016",
+        value: "2016",
+      },
+      {
+        label: "2015",
+        value: "2015",
       },
     ],
   },

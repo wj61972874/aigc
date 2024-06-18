@@ -62,6 +62,8 @@ const CircularProgressBar: React.FC<CircularProgressBarProps> = ({
           alignItems: "center",
           width: size - strokeWidth,
           height: size - strokeWidth,
+          backgroundColor: "#ffffff",
+          borderRadius: "50%",
         }}
       >
         {children}

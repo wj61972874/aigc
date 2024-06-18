@@ -7,6 +7,7 @@ import FansLetterRule from "./pages/FansLetterRule";
 import LetterQuestion from "./pages/LetterQuestion";
 import LetterResult from "./pages/LetterResult";
 import Test from "./pages/Test";
+import wx from "./utils/wx";
 
 const App: React.FC = () => {
   return (

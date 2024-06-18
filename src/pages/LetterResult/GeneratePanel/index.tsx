@@ -193,15 +193,44 @@ export default function GeneratePanel({
       >
         <div className={styles["content"]}>
           <img src={MODAL_ICON} className={styles["modal_icon"]} />
-          <div className={styles["title"]}>信件发送成功</div>
+          <div className={styles["title"]}>信件已生成</div>
           <div className={styles["desc"]}>
-            说明文字说明文字说明文字说明文字说明文字说明文字说明文字说明文字说明文字说明文字成功
+            您的专属粉丝来信已生成，可长按图片保存或点击领取按钮领取优惠券。
           </div>
           <div className={styles["modal_footer"]}>
-            <Button type="neutral" size="small" className={styles["save_btn"]}>
-              保存图片
+            <Button
+              type="neutral"
+              size="small"
+              className={styles["save_btn"]}
+              onClick={() => {
+                setModalVisable(false);
+              }}
+            >
+              长按原图保存
             </Button>
-            <Button size="small" className={styles["other_btn"]}>
+            {/* <wx-open-launch-weapp
+            id="launch-btn"
+            username="gh_e37d320dd621"
+            path="/pages/index/index"
+          >
+            <script type="text/wxtag-template">
+              <button
+                className="btn-launch"
+                // style={{ width: '100%', height: '48px', opacity: '0' }}
+              >打开小程序</button>
+            </script>
+          </wx-open-launch-weapp> */}
+            <Button
+              size="small"
+              className={styles["other_btn"]}
+              onClick={() => {
+                // console.log("杰哥测试----", window.wx);
+                // window.wx.miniProgram.navigateTo({
+                //   url: `/pages/index/index`,
+                // });
+                window.location.href = "https://d.weimob.com/d/1_11_pxwbsw";
+              }}
+            >
               领取专属优惠券
             </Button>
           </div>

@@ -1,4 +1,3 @@
-import result_bg from "@/assets/image/letterRes_bg.png";
 import classNames from "classnames";
 import { useEffect, useRef, useState } from "react";
 import styles from "./index.module.scss";
@@ -45,7 +44,6 @@ export default function TestPage() {
     <>
       {!image ? (
         <div className="relative w-[375px] h-[730px]" ref={resultRef}>
-          <img src={result_bg} className="w-full h-full object-fill " />
           <div
             className={classNames(
               styles["letter_text"],

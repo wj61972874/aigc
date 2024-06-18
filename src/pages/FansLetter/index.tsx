@@ -66,8 +66,8 @@ export default function LetterPage() {
             [styles.shake]: shake,
           })}
           checked={ruleCheck}
-          onChange={(e) => {
-            setRuleCheck(e.target.checked);
+          onChange={() => {
+            setRuleCheck((preValue) => !preValue);
           }}
           label={
             <div>

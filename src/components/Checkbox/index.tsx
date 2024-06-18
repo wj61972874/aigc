@@ -1,4 +1,5 @@
 import classNames from "classnames";
+import GOU_ICON from "@/assets/icon/gou_icon.svg";
 import styles from "./index.module.scss";
 
 // Checkbox组件接受checked和onChange等props
@@ -6,15 +7,14 @@ const Checkbox = ({ checked, onChange, label, name, className, ...props }) => {
   return (
     <label
       className={classNames("flex justify-center items-center", className)}
+      onClick={onChange}
     >
-      <input
-        type="checkbox"
-        name={name}
-        className={styles["cus_checkbox"]}
-        checked={checked}
-        onChange={onChange}
-        {...props} // 其他props将直接传递给input元素
-      />
+      {checked ? (
+        <img src={GOU_ICON} className={styles["checked_status"]} />
+      ) : (
+        <div className={styles["unchecked_status"]} />
+      )}
+      <span className={styles["cus_check"]} />
       {label}
     </label>
   );

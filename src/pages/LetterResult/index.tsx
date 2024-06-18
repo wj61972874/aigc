@@ -6,6 +6,7 @@ import {
   FANS_LETTER_PROMPTS,
   RESULT_BG_MAP,
   RESULT_PERSON_MAP,
+  TONE_FOR_NAME,
 } from "@/contants";
 import orderBy from "lodash/orderBy";
 import domtoimage from "dom-to-image";
@@ -13,9 +14,8 @@ import Button from "@/components/Button";
 import CircularProgressBar from "@/components/CircularProgressBar";
 import { useRecoilValue } from "recoil";
 import { questionState } from "@/store/fansLetter";
-// import result_bg_a from "@/assets/image/result_bg_a.png";
-// import result_bg_b from "@/assets/image/result_bg_b.png";
-// import result_bg_c from "@/assets/image/result_bg_c.png";
+import MAINLOGO_ICON from "@/assets/icon/mianLogo.svg";
+import WRITEICON from "@/assets/icon/write_icon.png";
 import GeneratePanel from "./GeneratePanel";
 import classNames from "classnames";
 import { clear, get, set } from "idb-keyval";
@@ -97,11 +97,17 @@ export default function LetterResult() {
         setWritter(_writter);
       }
 
-      info +=
-        // "。注意：信件生成结果不需要写信日期，不需要人名落款，不要出现/你的名字/、/正文结束/之类的占位提示词！！！，不要出现任何提示词，不要出现任何占位符！";
-        "。注意：信件生成结果不需要日期和人名落款的占位符提示词";
+      // info +=
+      //   // "。注意：信件生成结果不需要写信日期，不需要人名落款，不要出现/你的名字/、/正文结束/之类的占位提示词！！！，不要出现任何提示词，不要出现任何占位符！";
+      //   "。不需要署名和日期";
 
-      const messages = `${FANS_LETTER_PROMPTS},${info}`;
+      const questionTone = questionAnswer.find((i) => i.id === 3);
+
+      const letterName = `信件的称谓用${
+        TONE_FOR_NAME[questionTone?.chooseAnswer?.option]
+      }`;
+
+      const messages = `${FANS_LETTER_PROMPTS},${letterName},${info}`;
       const data = {
         type: 2,
         messages,
@@ -112,9 +118,10 @@ export default function LetterResult() {
           const newProgress = prevProgress + 1;
           return newProgress > 100 ? 100 : newProgress;
         });
-      }, 200);
+      }, 150);
       setTimer(progressTimer);
       const res = await apiGeneratePoem(data);
+
       setLetterContents(res.result);
       setProgress(100); // 请求完成，设置进度为 100%
       clearInterval(progressTimer); // 清除定时器
@@ -194,35 +201,51 @@ export default function LetterResult() {
   return (
     <div className={(styles["letter_result"], "w-full h-full bg-[#F7F8FA]")}>
       {!generate ? (
-        <>
-          <div className="h-full w-full flex flex-col items-center absolute z-10">
-            <CircularProgressBar
-              progress={progress}
-              size={300}
-              strokeWidth={4}
-              circleColor="#EF6F6F"
-              backgroundColor="#EEDFCD"
-              className={"mt-40"}
-            >
-              <div
-                style={{
-                  color: "#333",
-                  fontSize: "24px",
-                  fontWeight: "bold",
+        <div>
+          <div
+            style={{
+              backgroundImage: `url(${require("@/assets/image/loading_bg.svg")})`,
+              backgroundPosition: "center bottom",
+              height: "100vh",
+            }}
+          >
+            <img src={MAINLOGO_ICON} className="fixed top-6 left-4" />
+            <div className="h-full w-full flex flex-col items-center absolute z-10">
+              <CircularProgressBar
+                progress={progress}
+                size={300}
+                strokeWidth={4}
+                circleColor="#EF6F6F"
+                backgroundColor="#EEDFCD"
+                className={"mt-40"}
+              >
+                <div className="flex flex-col items-center">
+                  <div
+                    style={{
+                      color: "#936E43",
+                      fontSize: "60px",
+                      lineHeight: "normal",
+                    }}
+                  >
+                    {progress}%
+                  </div>
+                  <img src={WRITEICON} className="w-[140px]" />
+                  <div className="text-base text-[#936E43] font-medium mt-4">
+                    生成中...
+                  </div>
+                </div>
+              </CircularProgressBar>
+              <Button
+                className={(styles["do_letter_btn"], "absolute bottom-7")}
+                onClick={() => {
+                  navigator("/letterQuestion");
                 }}
               >
-                {progress}%
-              </div>
-            </CircularProgressBar>
-            <Button
-              className={(styles["do_letter_btn"], "absolute bottom-7")}
-              onClick={() => {
-                navigator("/letterQuestion");
-              }}
-            >
-              停止并返回
-            </Button>
+                停止并返回
+              </Button>
+            </div>
           </div>
+
           {letterContents && (
             <div className="relative">
               <div className="relative w-[375px] h-[730px]" ref={resultRef}>
@@ -253,7 +276,7 @@ export default function LetterResult() {
               <div className="absolute top-0 left-0 w-full h-full bg-[#F7F8FA]" />
             </div>
           )}
-        </>
+        </div>
       ) : (
         <GeneratePanel
           doGenerateAgain={handleDoGenerateAgain}

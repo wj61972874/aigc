@@ -1,34 +1,12 @@
-input[type="checkbox"] {
-    appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    -ms-appearance: none;
-    -o-appearance: none;
+.unchecked_status {
     width: 14px;
     height: 14px;
-    background-color: white;
-    line-height: 14px;
-    border-radius: 2px;
-    color: #fff;
-    text-align: center;
-    font-size: 12px;
+    background-color: #fff;
     margin-right: 4px;
 }
 
-/* 取消状态 */
-input[type="checkbox"]:after {
-    width: 14px;
-    height: 14px;
-    line-height: 14px;
-    display: block;
-    content: "";
-    color: transparent;
-    background-color: transparent;
-}
-
-/* 选中状态 */
-input[type="checkbox"]:checked:after {
-    content: "✔";
-    color: #fff;
-    background-color: #0D0C22;
+.checked_status {
+    width: 15px;
+    height: 15px;
+    margin-right: 4px;
 }
