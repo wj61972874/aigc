@@ -42,6 +42,8 @@ export default function LetterResult() {
 
   const [generate, setGenerate] = useState<boolean>(false);
 
+  const [loadingText, setLoadingText] = useState<string>("生成中...");
+
   useEffect(() => {
     const fetchData = async () => {
       const value = await get("generatedImgs");
@@ -97,8 +99,9 @@ export default function LetterResult() {
         setWritter(_writter);
       }
 
-      info +=
-        "。第一次观看话剧时间和最喜欢的话剧并无关联。祝福语希望能提到感谢或者祝福刘岩和白兰氏这个品牌";
+      // info +=
+      //   "。第一次观看话剧时间和最喜欢的话剧并无关联。祝福语希望能提到感谢或者祝福刘岩和白兰氏这个品牌";
+      info += "，祝福语希望能感谢或者祝福刘岩和白兰氏这个品牌";
 
       const questionTone = questionAnswer.find((i) => i.id === 3);
 
@@ -106,7 +109,9 @@ export default function LetterResult() {
         TONE_FOR_NAME[questionTone?.chooseAnswer?.option]
       }`;
 
-      const messages = `${FANS_LETTER_PROMPTS},${letterName},${info}`;
+      const preMessages = FANS_LETTER_PROMPTS.replace("{writter}", writter);
+
+      const messages = `${preMessages},${letterName},${info}`;
       const data = {
         type: 2,
         messages,
@@ -115,7 +120,10 @@ export default function LetterResult() {
       const progressTimer = setInterval(() => {
         setProgress((prevProgress) => {
           const newProgress = prevProgress + 1;
-          return newProgress > 100 ? 100 : newProgress;
+          if (newProgress === 99) {
+            setLoadingText("网络速度缓慢，请稍等或刷新页面重新生成");
+          }
+          return newProgress > 99 ? 99 : newProgress;
         });
       }, 150);
       setTimer(progressTimer);
@@ -229,8 +237,8 @@ export default function LetterResult() {
                     {progress}%
                   </div>
                   <img src={WRITEICON} className="w-[140px]" />
-                  <div className="text-base text-[#936E43] font-medium mt-4">
-                    生成中...
+                  <div className="text-base text-[#936E43] font-medium mt-4 text-center max-w-[175px]">
+                    {loadingText}
                   </div>
                 </div>
               </CircularProgressBar>
@@ -264,10 +272,12 @@ export default function LetterResult() {
                   )}
                   dangerouslySetInnerHTML={{
                     __html:
-                      letterContents.replace(
-                        /\n\n/g,
-                        "<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-                      ) +
+                      letterContents
+                        .replace(/\n\n——.*$/, "")
+                        .replace(
+                          /\n\n/g,
+                          "<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+                        ) +
                       `<span style="text-align: right; display:inline-block;width:100% ">—— ${writter}</span>`,
                   }}
                 />

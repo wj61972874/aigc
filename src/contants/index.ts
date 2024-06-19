@@ -11,7 +11,7 @@ import person_f from "@/assets/image/person_f.png";
 export const RECEVIER = "刘岩";
 export const LETTERS_MAXLENGTH = 200;
 
-export const FANS_LETTER_PROMPTS = `请帮我写一封给音乐剧演员${RECEVIER}的非标准信件格式的信，不需要有日期和署名，不要生成任何占位符提示词，字数在${LETTERS_MAXLENGTH}字左右`;
+export const FANS_LETTER_PROMPTS = `请帮我生成一段给音乐剧演员${RECEVIER}的信件正文 ，不需要有日期，署名是"——{writter}"，字数在${LETTERS_MAXLENGTH}字以下`;
 
 export const TONE_FOR_NAME = {
   A: "刘岩老师",
@@ -47,7 +47,7 @@ export const FANS_LETTER_QUESTIONS = [
     require: true,
     question: "你最喜欢刘岩的音乐剧是？",
     prePrompt: "最喜欢的音乐剧是",
-    sufPrompt: "，尽量引用该剧中的一句台词",
+    // sufPrompt: "，尽量引用该剧中的一句台词",
     promptSort: 6,
     componentType: "select",
     answers: [
